@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.service import Service
 
 def test_inventory():
     driver = webdriver.Chrome()
+    driver.implicitly_wait(10)  # Espera implícita de 10 segundos
+    
     try:
         #login
         driver.get("https://www.saucedemo.com/")
