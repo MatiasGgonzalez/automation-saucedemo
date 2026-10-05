@@ -1,6 +1,11 @@
 # Automatizacion QA  - Sauce demo
 
-Proyecto realizado 
+El objetivo de este proyecto es demostrar la capacidad de automatizar un flujo básico de navegación web, aplicando buenas prácticas como:
+
+- Uso de esperas explícitas e implícitas.
+- Validación de estados de la página (URL, textos visibles).
+- Organización del código en archivos separados (test y funciones auxiliares).
+- Control de versiones con Git y GitHub.
 
 ## Tecnologias usadas
 - Python
