@@ -14,14 +14,14 @@ def test_login_exitoso():
     try:
         driver.get("https://www.saucedemo.com/")
 
-        usuario = driver.find_element(By.ID, "user-name")
-        password = driver.find_element(By.ID, "password")
+        usuario = wait.until(EC.presence_of_element_located((By.ID, "user-name"))) #Espera explícita hasta que el elemento este en el DOM 
+        password = wait.until(EC.presence_of_element_located((By.ID, "password")))
 
-        login_button = wait.until(EC.element_to_be_clickable((By.ID, "login-button")))
+        login_button = wait.until(EC.element_to_be_clickable((By.ID, "login-button"))) # Espera explícita hasta que el botón de login sea clickeable
         
         password.send_keys("secret_sauce")
         usuario.send_keys("standard_user")
-        
+
         login_button.click()
 
         assert "https://www.saucedemo.com/inventory.html" in driver.current_url
