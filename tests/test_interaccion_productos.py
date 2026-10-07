@@ -31,7 +31,7 @@ def test_interaccion_productos():
         carrito_buttom.click()
         assert "https://www.saucedemo.com/cart.html" in driver.current_url 
 
-        #Verificar que el producto este agregado correctamente en el carrito
+        
         productos_carrito = driver.find_elements(By.CLASS_NAME, "cart_item")
         buzo_carrito = productos_carrito[0]
         nombre_producto_carrito = buzo_carrito.find_element(By.CLASS_NAME, "inventory_item_name").text
