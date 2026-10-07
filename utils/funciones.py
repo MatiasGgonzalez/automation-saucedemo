@@ -21,3 +21,25 @@ def obtener_producto_por_indice(driver, indice):
     nombre = producto.find_element(By.CLASS_NAME, "inventory_item_name").text
     precio = producto.find_element(By.CLASS_NAME, "inventory_item_price").text
     return nombre, precio
+
+
+def agregar_producto_al_carrito(driver, indice):
+    ## Agrega al carrito el producto en la posición indicada.
+    ## Devuelve el nombre del producto agregado.
+    producto = obtener_productos(driver)[indice]
+    nombre = producto.find_element(By.CLASS_NAME, "inventory_item_name").text
+    producto.find_element(By.CLASS_NAME, "btn_inventory").click()
+    return nombre
+
+def obtener_contador_carrito(driver):
+    ## Devuelve el contador del carrito como entero.
+    return int(driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text)
+
+def ir_al_carrito(driver):
+    ## Ir al carrito.
+    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
+
+
+def obtener_productos_carrito(driver):
+    ## Devuelve la lista de productos que están en el carrito.
+    return driver.find_elements(By.CLASS_NAME, "cart_item")

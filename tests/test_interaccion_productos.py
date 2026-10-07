@@ -2,41 +2,42 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from utils.funciones import login
+from utils.funciones import login, obtener_productos, agregar_producto_al_carrito, obtener_contador_carrito, ir_al_carrito, obtener_productos_carrito
+
+
 
 
 def test_interaccion_productos():
     driver = webdriver.Chrome()
-    driver.implicitly_wait(10)  # Espera implícita de 10 segundos
+    driver.implicitly_wait(10)
     try:
-        #login
+        # Login
         login(driver)
 
-        #Añadir producto al carrito
-        productos = driver.find_elements(By.CLASS_NAME, "inventory_item")
+        # Verificar que se cargaron los productos
+        productos = obtener_productos(driver)
         print(len(productos))
-        buzo_swag = productos[3]
-        boton_agregar = buzo_swag.find_element(By.CLASS_NAME, "btn_inventory")
-        boton_agregar.click()
+        assert len(productos) > 0
 
-        #Verificar que el producto se haya agregado al carrito
-        contador_carrito = driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text
-        contador_carrito = int(contador_carrito)
+        # Agregar el PRIMER producto al carrito (índice 0)
+        nombre_agregado = agregar_producto_al_carrito(driver, 0)
+
+        # Verificar el contador del carrito
+        contador_carrito = obtener_contador_carrito(driver)
         print(f"Cantidad de productos en el carrito: {contador_carrito}")
         assert contador_carrito > 0
 
-        #Navegar al carrito de compras. 
+        # Navegar al carrito
+        ir_al_carrito(driver)
+        assert "https://www.saucedemo.com/cart.html" in driver.current_url
 
-        carrito_buttom = driver.find_element(By.CLASS_NAME, "shopping_cart_link")
-        carrito_buttom.click()
-        assert "https://www.saucedemo.com/cart.html" in driver.current_url 
+        # Verificar que el producto agregado esté en el carrito
+        productos_carrito = obtener_productos_carrito(driver)
+        nombre_producto_carrito = productos_carrito[0].find_element(By.CLASS_NAME, "inventory_item_name").text
 
-        
-        productos_carrito = driver.find_elements(By.CLASS_NAME, "cart_item")
-        buzo_carrito = productos_carrito[0]
-        nombre_producto_carrito = buzo_carrito.find_element(By.CLASS_NAME, "inventory_item_name").text
         print(f"Nombre del producto en el carrito: {nombre_producto_carrito}")
-        assert nombre_producto_carrito == "Sauce Labs Fleece Jacket"
+
+        assert nombre_producto_carrito == "Sauce Labs Backpack"
 
     finally:
-        driver.quit()          
+        driver.quit()      
