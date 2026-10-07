@@ -2,38 +2,30 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from utils.funciones import login, obtener_producto_por_indice, obtener_productos
+ 
+
 
 def test_inventory():
     driver = webdriver.Chrome()
     driver.implicitly_wait(10)  # Espera implícita de 10 segundos
     
     try:
-        #login
-        driver.get("https://www.saucedemo.com/")
+        
+        login(driver) 
 
-        usuario = driver.find_element(By.ID, "user-name")
-        password = driver.find_element(By.ID, "password")
-        login_button = driver.find_element(By.ID, "login-button")
-
-        password.send_keys("secret_sauce")
-        usuario.send_keys("standard_user")
-        login_button.click()      
-
-        #Verificar titulo de la pagina
-        assert driver.title == "Swag Labs"
-
-        #Verificar productos visibles
-        productos = driver.find_elements(By.CLASS_NAME, "inventory_item")
+        #Verificar que se hayan cargado los productos del inventario
+        productos = obtener_productos(driver)
         print(len(productos))
         assert len(productos) > 0
 
-        buzo_swag = productos[3]
-        nombre_producto = buzo_swag.find_element(By.CLASS_NAME, "inventory_item_name").text
-        precio_producto = buzo_swag.find_element(By.CLASS_NAME, "inventory_item_price").text
-        print(f"Buzo Swag: {nombre_producto} - Precio: {precio_producto}")
+        nombre, precio = obtener_producto_por_indice(driver, 0)
+        print(f"Producto: {nombre} - Precio: {precio}")
 
-        assert nombre_producto == "Sauce Labs Fleece Jacket"  
-        assert precio_producto ==  "$49.99"
+        #Verificar que el nombre y precio del producto sean correctos
+        assert nombre == "Sauce Labs Backpack"
+        assert precio == "$29.99"
+
 
         #Verificar menu 
         menu_button = driver.find_element(By.ID, "react-burger-menu-btn")
